@@ -13,7 +13,7 @@
 
 To save your time, Mirorium will be distributed as pre-compiled binaries so you won't need to install build dependencies or compile the source code manually.
 
-* 🐧 **Linux:** Pre-compiled binaries are **not yet released** but will be published very soon in the **[Releases](https://github.com)** section. 
+* 🐧 **Linux:** Pre-compiled binaries are **not yet released** but will be published very soon in the **[Releases](https://github.com/mksushka/Mirorium/releases)** section. 
 * 🪟 **Windows:** Native Windows builds are planned and will follow shortly after the initial Linux release.
 
 ## Contributing
