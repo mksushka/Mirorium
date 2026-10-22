@@ -457,7 +457,7 @@ int is_nonbare_repository_dir(struct strbuf *path)
 	size_t orig_path_len = path->len;
 	assert(orig_path_len != 0);
 	strbuf_complete(path, '/');
-	strbuf_addstr(path, ".git");
+	strbuf_addstr(path, ".mir");
 	if (read_gitfile_gently(path->buf, &gitfile_error) || is_git_directory(path->buf))
 		ret = 1;
 	if (gitfile_error == READ_GITFILE_ERR_OPEN_FAILED ||
@@ -2413,10 +2413,10 @@ free_return:
  */
 static int needs_work_tree_config(const char *git_dir, const char *work_tree)
 {
-	if (!strcmp(work_tree, "/") && !strcmp(git_dir, "/.git"))
+	if (!strcmp(work_tree, "/") && !strcmp(git_dir, "/.mir"))
 		return 0;
 	if (skip_prefix(git_dir, work_tree, &git_dir) &&
-	    !strcmp(git_dir, "/.git"))
+	    !strcmp(git_dir, "/.mir"))
 		return 0;
 	return 1;
 }
