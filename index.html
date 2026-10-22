@@ -1,5 +1,187 @@
 <!DOCTYPE html>
-<html>
-</title>Mirorium</title>
-    <h1>Hello world!<h1>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirorium Documentation</title>
+    
+    <style>
+        /* General page layout */
+        body {
+            background-color: #0b0e14;
+            color: #c9d1d9;
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Beautiful preview window wrapper */
+        .preview-window {
+            width: 100%;
+            max-width: 800px;
+            background-color: #12161f;
+            border: 1px solid #222936;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        /* Top control bar of the window */
+        .window-header {
+            background-color: #1a1f2c;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #222936;
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .window-title {
+            color: #8b949e;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Content area where the rendered Markdown is displayed */
+        .window-body {
+            padding: 40px;
+        }
+
+        /* Markdown element overrides using Segoe UI typography */
+        h1, h2, h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #222936;
+            padding-bottom: 8px;
+        }
+
+        h1 { font-size: 2.2em; margin-top: 0; }
+        h2 { font-size: 1.6em; }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #cbd5e1;
+        }
+
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            margin-top: 0;
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-top: 6px;
+            color: #cbd5e1;
+        }
+
+        /* Styled blockquote container for the Warning callout */
+        blockquote {
+            margin: 0 0 20px 0;
+            padding: 16px 20px;
+            background-color: #1a1f2c;
+            border-left: 4px solid #ef4444;
+            border-radius: 0 8px 8px 0;
+        }
+
+        blockquote p {
+            margin: 0;
+            color: #94a3b8;
+        }
+
+        /* Inline code snippets like `.git` */
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 90%;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #f43f5e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Card Display Window -->
+    <div class="preview-window">
+        <div class="window-header">
+            <div class="window-dots">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <div class="window-title">README.md — Mirorium</div>
+        </div>
+        
+        <!-- Target container for HTML insertion -->
+        <article id="content" class="window-body"></article>
+    </div>
+
+    <!-- Included library script dependency -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+
+    <script>
+        // Plaintext Markdown Source Data
+        const markdownText = `# Mirorium
+
+**Mirorium** is a deep fork of Git evolving into an **independent and standalone version control system**.
+
+> ⚠️ **Important:** The project was launched recently on **October 21, 2026**. At this early stage, the codebase does not yet differ significantly from original Git. However, the roadmap focuses on a **radical architectural departure**. In future releases, Mirorium will implement its own data structures and storage formats, making it entirely **incompatible with standard \`.git\` repositories**.
+
+## Project Evolution
+
+* **Current Status:** Git-based foundation, preparing for massive core refactoring.
+* **Roadmap:** Breaking free from Git's backwards-compatibility constraints to completely redesign indexing, object storage, and history management.
+
+## Installation & Binaries
+
+To save your time, Mirorium will be distributed as pre-compiled binaries so you won't need to install build dependencies or compile the source code manually.
+
+* 🐧 **Linux:** Pre-compiled binaries are **not yet released** but will be published very soon in the **[Releases](https://github.com)** section. 
+* 🪟 **Windows:** Native Windows builds are planned and will follow shortly after the initial Linux release.
+
+## Contributing
+
+Since the project has just started, now is the perfect time to get involved in shaping a new architecture. If you have bold ideas on how to build a version control system without the legacy constraints of Git, feel free to open Issues or submit Pull Requests!
+
+## License
+
+The source code is distributed under the GNU General Public License v2.0 (GPL-2.0).`;
+
+        // Execution of marked parsing compilation engine to generate nodes inside the card container element
+        document.getElementById('content').innerHTML = marked.parse(markdownText);
+    </script>
+</body>
+</html>
