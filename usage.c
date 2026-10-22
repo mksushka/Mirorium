@@ -98,7 +98,7 @@ static void warn_builtin(const char *warn, va_list params)
 {
 	trace2_cmd_error_va(warn, params);
 
-	vreportf(_("⚠️WARING: "), warn, params);
+	vreportf(_("⚠️WARNING: "), warn, params);
 }
 
 static int die_is_recursing_builtin(void)
