@@ -71,7 +71,7 @@ static void die_message_builtin(const char *err, va_list params)
 	if (!err)
 		return;
 	trace2_cmd_error_va(err, params);
-	vreportf(_("fatal: "), err, params);
+	vreportf("☢️FATAL: "), err, params);
 }
 
 /*
@@ -91,14 +91,14 @@ static void error_builtin(const char *err, va_list params)
 {
 	trace2_cmd_error_va(err, params);
 
-	vreportf(_("error: "), err, params);
+	vreportf(_("[❌ERROR]: "), err, params);
 }
 
 static void warn_builtin(const char *warn, va_list params)
 {
 	trace2_cmd_error_va(warn, params);
 
-	vreportf(_("warning: "), warn, params);
+	vreportf(_("⚠️WARING: "), warn, params);
 }
 
 static int die_is_recursing_builtin(void)
@@ -242,7 +242,7 @@ void NORETURN die_errno(const char *fmt, ...)
 	va_list params;
 
 	if (die_is_recursing()) {
-		fputs("fatal: recursion detected in die_errno handler\n",
+		fputs("☢️FATAL: ecursion detected in die_errno handler\n",
 			stderr);
 		exit(128);
 	}
