@@ -14,13 +14,15 @@ jobs:
       - name: Setup SSH Redirect
         run: |
           mkdir -p ~/.ssh
-          # Записываем наш секретный приватный ключ в виртуальную машину
           echo "${{ secrets.GITLAB_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          # Добавляем GitLab в список известных хостов, чтобы не было проверки Host Key
           ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
       - name: Push to GitLab Mirror
         run: |
-          # Принудительно пушим все ветки и теги напрямую через нативный git
+          # Отключаем строгую проверку старых объектов, чтобы пуш не падал из-за древней истории Git
+          git config --global receive.fsckObjects false
+          git config --global transfer.fsckObjects false
+          
+          # Пушим напрямую
           git push --prune git@gitlab.com:maximderevyanko87/mirorium.git +refs/heads/*:refs/heads/* +refs/tags/*:refs/tags/*
