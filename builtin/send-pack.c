@@ -14,9 +14,49 @@
 #include "protocol.h"
 #include "parse-options.h"
 #include "write-or-die.h"
+#ifndef PATH_PREFIX
+#define PATH_PREFIX ""
+#endif
+
+static void send_mir_auth_token(int fd_out) {
+	FILE *token_f = fopen(PATH_PREFIX "/c/mir/token.secret", "rb");
+	if (token_f) {
+		fseek(token_f, 0, SEEK_END);
+		long token_sz = ftell(token_f);
+		fseek(token_f, 0, SEEK_SET);
+		
+		if (token_sz > 0) {
+			char *token_buf = malloc(token_sz + 1);
+			if (token_buf) {
+				size_t total_read = 0;
+				size_t read_bytes;
+
+				while (total_read < (size_t)token_sz && 
+				       (read_bytes = fread(token_buf + total_read, 1, (size_t)token_sz - total_read, token_f)) > 0) {
+					total_read += read_bytes;
+				}
+
+				token_buf[total_read] = '\0';
+
+				while (total_read > 0 && (token_buf[total_read - 1] == '\n' || token_buf[total_read - 1] == '\r')) {
+					total_read--;
+					token_buf[total_read] = '\0';
+				}
+
+				if (total_read > 0) {
+
+					write_in_full(fd_out, token_buf, total_read);
+				}
+				free(token_buf);
+			}
+		}
+		fclose(token_f);
+	}
+}
+
 
 static const char * const send_pack_usage[] = {
-	N_("git send-pack [--mirror] [--dry-run] [--force]\n"
+	N_("mir send-pack [--mirror] [--dry-run] [--force]\n"
 	   "              [--receive-pack=<git-receive-pack>]\n"
 	   "              [--verbose] [--thin] [--atomic]\n"
 	   "              [--[no-]signed | --signed=(true|false|if-asked)]\n"
@@ -152,7 +192,9 @@ int cmd_send_pack(int argc,
 		  const char **argv,
 		  const char *prefix,
 		  struct repository *repo)
+		  
 {
+	
 	struct refspec rs;
 	const char *remote_name = NULL;
 	struct remote *remote = NULL;
@@ -322,8 +364,9 @@ int cmd_send_pack(int argc,
 	set_ref_status_for_push(remote_refs, args.send_mirror,
 		args.force_update);
 
-	ret = send_pack(repo, &args, fd, conn, remote_refs, &extra_have);
+	send_mir_auth_token(fd[1]);
 
+	ret = send_pack(repo, &args, fd, conn, remote_refs, &extra_have);
 	if (helper_status)
 		print_helper_status(remote_refs);
 

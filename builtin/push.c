@@ -1,5 +1,5 @@
 /*
- * "git push"
+ * "mir push"
  */
 
 #define USE_THE_REPOSITORY_VARIABLE
