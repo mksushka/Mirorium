@@ -34,6 +34,7 @@
 
 static struct commit_extra_header *read_commit_extra_header_lines(const char *buf, size_t len, const char **);
 
+
 int save_commit_buffer = 1;
 int no_graft_file_deprecated_advice;
 

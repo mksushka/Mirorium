@@ -43,9 +43,11 @@
 #include "commit-graph.h"
 #include "pretty.h"
 #include "trailer.h"
+#include "mircommit.h"
 
+static int fixbug_flag = 0;
 static const char * const builtin_commit_usage[] = {
-	N_("git commit [-a | --interactive | --patch] [-s] [-v] [-u[<mode>]] [--amend]\n"
+	N_("mir commit [-a | --interactive | --patch] [-s] [-v] [-u[<mode>]] [--amend]\n"
 	   "           [--dry-run] [(-c | -C | --squash) <commit> | --fixup [(amend|reword):]<commit>]\n"
 	   "           [-F <file> | -m <msg>] [--reset-author] [--allow-empty]\n"
 	   "           [--allow-empty-message] [--no-verify] [-e] [--author=<author>]\n"
@@ -57,37 +59,37 @@ static const char * const builtin_commit_usage[] = {
 };
 
 static const char * const builtin_status_usage[] = {
-	N_("git status [<options>] [--] [<pathspec>...]"),
+	N_(mir status [<options>] [--] [<pathspec>...]"),
 	NULL
 };
 
 static const char empty_amend_advice[] =
 N_("You asked to amend the most recent commit, but doing so would make\n"
 "it empty. You can repeat your command with --allow-empty, or you can\n"
-"remove the commit entirely with \"git reset HEAD^\".\n");
+"remove the commit entirely with \"mir reset HEAD^\".\n");
 
 static const char empty_cherry_pick_advice[] =
 N_("The previous cherry-pick is now empty, possibly due to conflict resolution.\n"
 "If you wish to commit it anyway, use:\n"
 "\n"
-"    git commit --allow-empty\n"
+"    mir commit --allow-empty\n"
 "\n");
 
 static const char empty_rebase_pick_advice[] =
-N_("Otherwise, please use 'git rebase --skip'\n");
+N_("Otherwise, please use 'mir rebase --skip'\n");
 
 static const char empty_cherry_pick_advice_single[] =
-N_("Otherwise, please use 'git cherry-pick --skip'\n");
+N_("Otherwise, please use 'mir cherry-pick --skip'\n");
 
 static const char empty_cherry_pick_advice_multi[] =
 N_("and then use:\n"
 "\n"
-"    git cherry-pick --continue\n"
+"    mir cherry-pick --continue\n"
 "\n"
 "to resume cherry-picking the remaining commits.\n"
 "If you wish to skip this commit, use:\n"
 "\n"
-"    git cherry-pick --skip\n"
+"    mir cherry-pick --skip\n"
 "\n");
 
 static const char *color_status_slots[] = {
@@ -636,9 +638,9 @@ static void determine_author_info(struct strbuf *author_ident)
 	char *name, *email, *date;
 	struct ident_split author;
 
-	name = xstrdup_or_null(getenv("GIT_AUTHOR_NAME"));
-	email = xstrdup_or_null(getenv("GIT_AUTHOR_EMAIL"));
-	date = xstrdup_or_null(getenv("GIT_AUTHOR_DATE"));
+	name = xstrdup_or_null(getenv("MIR_AUTHOR_NAME"));
+	email = xstrdup_or_null(getenv("MIR_AUTHOR_EMAIL"));
+	date = xstrdup_or_null(getenv("MIR_AUTHOR_DATE"));
 
 	if (author_message) {
 		struct ident_split ident;
@@ -1744,6 +1746,7 @@ int cmd_commit(int argc,
 		OPT_BOOL('i', "include", &also, N_("add specified files to index for commit")),
 		OPT_BOOL(0, "interactive", &interactive, N_("interactively add files")),
 		OPT_BOOL('p', "patch", &patch_interactive, N_("interactively add changes")),
+		OPT_BOOL(0, "fixbug", &fixbug_flag, N_("add fixed bug mark ")),
 		OPT_DIFF_UNIFIED(&interactive_opts.context),
 		OPT_DIFF_INTERHUNK_CONTEXT(&interactive_opts.interhunkcontext),
 		OPT_BOOL('o', "only", &only, N_("commit only specified files")),
